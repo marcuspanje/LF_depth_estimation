@@ -1,6 +1,4 @@
-load('lf_images/books_h.mat');
 sz_h = size(h);
-disp('run admm');
 %run admm w TV prior
 x = zeros(sz_h(1), sz_h(2));
 z = zeros(sz_h(1), sz_h(2),2);
@@ -18,10 +16,10 @@ FDyT = conj(FDy);
 FI = psf2otf([0 0 0; 0 1 0; 0 0 0], sz_h(1:2));
 FIT = conj(FI);
 rho = 10;
-lambda = 0.05; 
+lambda = 0.01; 
 thresh = lambda/rho;
 
-Fnum1 = FIT.*fft2(h);
+Fnum1 = FIT.*fft2(hsc);
 Fden = FIT.*FI + rho*(FDxT.*FDx + FDyT.*FDy);
 nIter = 30;
 for k = 1:nIter
@@ -37,7 +35,4 @@ for k = 1:nIter
   z(~(ind1|ind2)) = 0;
   u = u + Dxk - z;
 end
-
-
-plotter
-
+z = real(ifft2(Fx));
