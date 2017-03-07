@@ -2,8 +2,8 @@
 %1 - run alg from the start
 %2 - run after lf is in memory
 %3 - run after the noisy depth map, h, is in memory
-run_params = 3;
-fname = 'cars_1_eslf';
+run_params = 1;
+fname = 'people_14_eslf';
 if run_params < 2
   disp('loading lf image');
   fname_all = sprintf('lf_images/%s.png', fname);

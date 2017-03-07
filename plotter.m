@@ -1,32 +1,33 @@
 %scale and display h
 z = real(ifft2(Fx));
-min_th = 20;
-zpos = z(z > min_th);
-mu = mean(zpos); sig = std(zpos);
-max_th = mu + sig 
-min_th = mu - sig 
+pos = z(z > 0);
+mu = mean(pos); 
+max_th = 1.5*mu;
+min_th = 0.5*mu;
 zdisp = max(z, min_th);
 zdisp = min(zdisp, max_th);
 zdisp = (1./zdisp);
 zdisp = zdisp./max(zdisp(:));
 figure(1);
-subplot(1,3,1);
+subplot(2,2,1);
 imshow(zdisp);
-title('OF map with admm');
+title(sprintf('OF depth with admm, lambda = %.2f, rho = %.2f', lambda, rho));
 
-hpos = h(h>min_th);
-mu = mean(hpos); sig = std(hpos);
 hdisp = max(h, min_th);
 hdisp = min(hdisp, max_th);
 hdisp = 1./hdisp;
 hdisp = hdisp ./ max(hdisp(:));
-subplot(1,3,2);
+subplot(2,2,2);
 imshow(hdisp);
-title('OF map');
+title('OF depth');
 
-subplot(1,3,3);
-imshow(squeeze(lf(:,:,nV_2,nV_2,:)));
+subplot(2,2,3);
+imshow(3*squeeze(lf(:,:,nV_2,nV_2,:)));
 title('original');
         
-     
 
+Cdisp = sum(C,3);
+Cdisp = Cdisp./max(Cdisp);
+subplot(2,2,4);
+imshow(Cdisp);
+title('Confidence of OF');
