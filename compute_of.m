@@ -2,7 +2,7 @@
 %right , down in positive
 nViews = 14;
 nV_2 = round(nViews/2);
-dvx = (linspace(1,nViews,nViews)-nV_2);
+dvx = (linspace(1,nViews,nViews)-nV_2)*sz_lf(1)./sz_lf(2);
 dvy = linspace(1,nViews,nViews)-nV_2;
 sz_lf = size(lf);
 valid = logical(zeros(nViews, nViews)); 
@@ -24,8 +24,8 @@ FK = psf2otf(ones(szP), sz_lf(1:2));
 disp('precompute gradients');
 Ix = zeros(sz_lf(1), sz_lf(2), 1, 1, 3);
 Iy = zeros(sz_lf(1), sz_lf(2), 1, 1, 3); 
-%Ix(1:end-1,:,:,:,:) = (lf(2:end,:,nV_2, nV_2,:) - lf(1:end-1,:,nV_2, nV_2,:))./sz_lf(1);
-%Iy(:,1:end-1,:,:,:) = (lf(:,2:end,nV_2, nV_2,:) - lf(:,1:end-1,nV_2, nV_2,:))./sz_lf(2);
+%Ix(1:end-1,:,:,:,:) = (lf(2:end,:,nV_2, nV_2,:)-lf(1:end-1,:,nV_2, nV_2,:))./(sz_lf(1)/sz_lf(2));
+%Iy(:,1:end-1,:,:,:) = (lf(:,2:end,nV_2, nV_2,:)-lf(:,1:end-1,nV_2, nV_2,:));
 Ix(1:end-1,:,:,:,:) = (lf(2:end,:,nV_2, nV_2,:) - lf(1:end-1,:,nV_2, nV_2,:));
 Iy(:,1:end-1,:,:,:) = (lf(:,2:end,nV_2, nV_2,:) - lf(:,1:end-1,nV_2, nV_2,:));
 C = squeeze(Ix.^2 + Iy.^2);

@@ -3,7 +3,8 @@
 %2 - run after lf is in memory
 %3 - run after the noisy depth map, h, is in memory
 %4 - run after admm
-run_params = 1;
+
+run_params = 3;
 fname = 'lf_images/books';
 
 if run_params < 2
@@ -19,7 +20,7 @@ end
 
 if run_params < 4
   disp('run admm with TV prior');
-  run_admm;
+  run_admm_vec;
 end
 
 disp('plot');
