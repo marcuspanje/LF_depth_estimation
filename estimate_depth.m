@@ -1,11 +1,12 @@
 %run_params
 %1 - run alg from the start
-%2 - run after lf is in memory
-%3 - run after the noisy depth map, h, is in memory
-%4 - run after admm
+%2 - run from compute optical flow
+%3 - run from admm
+%4 - run from plotter
 
 run_params = 3;
-fname = 'lf_images/books';
+fname = 'cars_1'
+addpath('jsonlab-1.5/jsonlab-1.5');
 
 if run_params < 2
   disp('loading light field image');

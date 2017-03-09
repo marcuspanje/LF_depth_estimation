@@ -1,10 +1,10 @@
 %indices of shift (centered at middle image)
 %right , down in positive
+sz_lf = size(lf);
 nViews = 14;
 nV_2 = round(nViews/2);
 dvx = (linspace(1,nViews,nViews)-nV_2)*sz_lf(1)./sz_lf(2);
 dvy = linspace(1,nViews,nViews)-nV_2;
-sz_lf = size(lf);
 valid = logical(zeros(nViews, nViews)); 
 validImagesPerRow = [0 6 8 10 10 10 10 10 10 10 10 8 6 0]; 
 for i = 1:nViews
