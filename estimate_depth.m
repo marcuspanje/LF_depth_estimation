@@ -4,9 +4,10 @@
 %3 - run from admm
 %4 - run from plotter
 
-run_params = 3;
-fname = 'cars_1'
+run_params = 1;
+fname = 'cars_1';
 addpath('jsonlab-1.5/jsonlab-1.5');
+data = loadjson(sprintf('lf_images/%s/%s.json', fname, fname)); 
 
 if run_params < 2
   disp('loading light field image');

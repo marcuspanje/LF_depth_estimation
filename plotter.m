@@ -1,16 +1,29 @@
 %scale and display h
+%focal length
+%sensor distance from lens
+Sd = data.frames{1}.frame.metadata.devices.mla.sensorOffset.z;
+%focal length
+f = data.frames{1}.frame.metadata.devices.lens.focalLength * 1e-3;
+Sd = f + 0.5*f;
 
-zdisp = (1./real(x));
-zdisp = zdisp./max(zdisp(:));
+
+D = 1/(1/f - 1/Sd);
+%D = 2;
+depth_raw = f*D./(h.*(D-f) + f);
+depth_smooth = f*D./(x.*(D-f) + f);
+
+depth_smooth_sc = depth_smooth ./max(depth_smooth(:));
 figure(1);
 subplot(2,2,1);
-imshow(zdisp);
+imshow(depth_smooth_sc);
 title(sprintf('OF depth with admm, lambda = %.3f, rho = %.2f', lambda, rho));
 
 subplot(2,2,2);
-depth = 1./hsc;
-depth = depth ./ max(depth(:));
-imshow(depth);
+me = mean(depth_raw(:));
+depth_raw_sc = min(depth_raw, 2*me);
+depth_raw_sc = max(depth_raw_sc, 0.1*me);
+depth_raw_sc = depth_raw_sc ./ max(depth_raw_sc(:));
+imshow(depth_raw_sc);
 title('OF depth');
 
 subplot(2,2,3);

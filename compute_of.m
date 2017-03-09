@@ -3,8 +3,12 @@
 sz_lf = size(lf);
 nViews = 14;
 nV_2 = round(nViews/2);
-dvx = (linspace(1,nViews,nViews)-nV_2)*sz_lf(1)./sz_lf(2);
-dvy = linspace(1,nViews,nViews)-nV_2;
+%pitch of pixel and viewing dist
+pxPitch = data.frames{1}.frame.metadata.devices.sensor.pixelPitch;
+vPitch = data.frames{1}.frame.metadata.devices.mla.lensPitch;
+
+dvx = vPitch*(linspace(1,nViews,nViews)-nV_2);
+dvy = vPitch*(linspace(1,nViews,nViews)-nV_2);
 valid = logical(zeros(nViews, nViews)); 
 validImagesPerRow = [0 6 8 10 10 10 10 10 10 10 10 8 6 0]; 
 for i = 1:nViews
@@ -26,8 +30,8 @@ Ix = zeros(sz_lf(1), sz_lf(2), 1, 1, 3);
 Iy = zeros(sz_lf(1), sz_lf(2), 1, 1, 3); 
 %Ix(1:end-1,:,:,:,:) = (lf(2:end,:,nV_2, nV_2,:)-lf(1:end-1,:,nV_2, nV_2,:))./(sz_lf(1)/sz_lf(2));
 %Iy(:,1:end-1,:,:,:) = (lf(:,2:end,nV_2, nV_2,:)-lf(:,1:end-1,nV_2, nV_2,:));
-Ix(1:end-1,:,:,:,:) = (lf(2:end,:,nV_2, nV_2,:) - lf(1:end-1,:,nV_2, nV_2,:));
-Iy(:,1:end-1,:,:,:) = (lf(:,2:end,nV_2, nV_2,:) - lf(:,1:end-1,nV_2, nV_2,:));
+Ix(1:end-1,:,:,:,:) = (lf(2:end,:,nV_2, nV_2,:) - lf(1:end-1,:,nV_2, nV_2,:))./pxPitch;
+Iy(:,1:end-1,:,:,:) = (lf(:,2:end,nV_2, nV_2,:) - lf(:,1:end-1,nV_2, nV_2,:))./pxPitch;
 C = squeeze(Ix.^2 + Iy.^2);
 K_Ix2_Iy2 = ifft2(FK.*fft2(C));
 

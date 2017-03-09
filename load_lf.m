@@ -1,4 +1,4 @@
-fname_all = sprintf('lf_images/%s_eslf.png', fname);
+fname_all = sprintf('lf_images/%s/%s_eslf.png', fname, fname);
 img = im2double(imread(fname_all));
 sz = size(img);
 nViews = 14;
