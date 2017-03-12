@@ -5,12 +5,18 @@
 %4 - run from plotter
 
 run_params = 1;
-fname = 'room';
+fname = 'books_2';
 %path to json library
 addpath('jsonlab-1.5/jsonlab-1.5');
 %json filename of camera metatdata extracted from lytro .LFP file
 %see https://github.com/nrpatel/lfptools on how to obtain this file
-%data = loadjson(sprintf('lf_images/%s/%s.json', fname, fname)); 
+try
+    data = loadjson(sprintf('lf_images/%s/%s.json', fname, fname)); 
+    validData = 1;
+catch
+    validData = -1;
+    disp('no camera meta data found');
+end
 
 if run_params < 2
   disp('loading light field image');

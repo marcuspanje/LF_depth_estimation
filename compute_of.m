@@ -70,10 +70,4 @@ end
 
 
 h = real(ifft2(Fnum) ./ den);  
-
-%h should be > 0 
-mu = mean(h(h>0));
-max_th = 10*mu;
-min_th = 0.1*mu; 
-hsc = max(h, min_th); %scaled h
-hsc = min(hsc, max_th);
+hsc = mean_scale(h, 0.1, 10);
