@@ -4,8 +4,8 @@
 %3 - run from admm
 %4 - run from plotter
 
-run_params = 1;
-fname = 'books_2';
+run_params = 3;
+fname = 'books_4';
 %path to json library
 addpath('jsonlab-1.5/jsonlab-1.5');
 %json filename of camera metatdata extracted from lytro .LFP file

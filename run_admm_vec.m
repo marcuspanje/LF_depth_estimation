@@ -1,8 +1,8 @@
 %use confidence values as weights
 Csc = sum(C,3);
-Csc = mean_scale(Csc, 0.1, 2);
-%Csc(h<0) = 0;
-offset = 0.2;
+Csc = mean_scale(Csc, 0, 2);
+Csc(h<0) = 0;
+offset = 0.2
 Csc = (1-offset)*Csc + offset;
 %Csc = ones(sz_lf(1:2));
 
@@ -12,9 +12,10 @@ x = zeros(sz_h(1), sz_h(2));
 z = zeros(sz_h(1), sz_h(2),2);
 u = zeros(sz_h(1), sz_h(2),2);
 rho = 10;
-lambda = 0.05; 
+lambda = 0.01; 
 thresh = lambda/rho;
-b1 = Csc.*hsc;
+%b1 = Csc.*hsc;
+b1 = Csc .* h;
 nIter = 30;
 tol = 1e-10;
 maxIter = 50;
@@ -34,7 +35,7 @@ for k = 1:nIter
   z(ind2) = v(ind2)+thresh;
   z(~(ind1|ind2)) = 0;
   u = u + Dxk - z;
-  l1 = Csc.^2.*((x-hsc).^2);
+  l1 = Csc.^2.*((x-h).^2);
   l2 = abs(Dxk);
   loss(k) = 0.5*sum(l1(:)) + lambda*sum(l2(:));
 end

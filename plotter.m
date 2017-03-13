@@ -3,8 +3,8 @@
 %sensor distance from lens
 %Sd = data.frames{1}.frame.metadata.devices.mla.sensorOffset.z;
 %focal length
-saveImages = 1;
-f = 0.05
+saveImages = 2;
+f = 0.05;
 if validData == 1
     f = data.frames{1}.frame.metadata.devices.lens.focalLength;
 end
@@ -45,7 +45,7 @@ imshow(depth_rgb);
 title('OF depth');
 
 subplot(2,2,3);
-imshow(5*squeeze(lf(:,:,nV_2,nV_2,:)));
+imshow(2*squeeze(lf(:,:,nV_2,nV_2,:)));
 title('original');
         
 subplot(2,2,4);
@@ -67,3 +67,8 @@ if saveImages
     imwrite(Csc, sprintf('lf_images/%s/%s_conf.png', fname, fname));
 end
 
+figure(4)
+xline = 80;
+dline = depth_raw(xline, :) .* (Csc(xline, :) > 0.3);
+dline(dline > 5) = 0;
+plot(1:sz_lf(2), dline, 'o');
