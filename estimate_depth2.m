@@ -5,13 +5,13 @@
 %4 - run from plotter
 
 run_params = 1;
-fname = 'cotton';
+fname = 'flowers_plants_1';
 %path to json library
 addpath('jsonlab-1.5/jsonlab-1.5');
 
 if run_params < 2
   disp('loading light field image');
-  load_lf2;
+  load_lf;
 end
 
 if run_params < 3
@@ -25,5 +25,5 @@ if run_params < 4
 end
 
 disp('plot');
-plotter2;
+plotter;
 

@@ -18,7 +18,6 @@ nV_2 = round(nViews/2);
 %shift in pixel, and viewpoint should be the same units,
 %so estimate the baseline of 1 viewpoint shift along an axis
 %as #pixels in an image along that axis
-viewPitch = apertureDiameter/nViews;
 dvx = viewPitch*(linspace(1,nViews,nViews)-nV_2);
 dvy = viewPitch*(linspace(1,nViews,nViews)-nV_2);
 
@@ -36,7 +35,6 @@ end
 %surrounding patch 
 szP = 5; %should be odd
 FK = psf2otf(ones(szP), sz_lf(1:2)); %convolution kernel for patch averaging
-pxPitch = nViews*pxWidth;
 %pixel gradients
 Ix = zeros(sz_lf(1), sz_lf(2), 1, 1, 3);
 Iy = zeros(sz_lf(1), sz_lf(2), 1, 1, 3); 
