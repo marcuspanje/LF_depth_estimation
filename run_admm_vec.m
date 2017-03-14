@@ -1,7 +1,6 @@
 %use confidence values as weights
 Csc = sum(C,3);
 Csc = mean_scale(Csc, 0, 2);
-Csc(h<0) = 0;
 offset = 0.3;
 Csc = (1-offset)*Csc + offset;
 Csc = Csc.^2;
@@ -10,11 +9,13 @@ Csc = Csc.^2;
 %run admm w TV prior
 sz_h = size(h);
 x = zeros(sz_h(1), sz_h(2));
+x = h;
 z = zeros(sz_h(1), sz_h(2),3);
 u = zeros(sz_h(1), sz_h(2),3);
 rho = 10;
-lambda = 0.01; 
+lambda = 0.001; 
 thresh = lambda/rho;
+
 b1 = Csc.*hsc;
 %b1 = Csc .* h;
 nIter = 30;
@@ -25,8 +26,10 @@ Afunline = @(x) Afun(x, sz_h, Csc, rho);
 loss = zeros(nIter, 1);
 loss2 = zeros(nIter, 1);
 Kx = zeros(size(z));
-pos_th = 0.001;
-h_true = f*(focus_plane-depth_true)/((focus_plane-f)*depth_true);
+max_d = 5;
+min_h = (f*focus_plane./max_d - f)./(focus_plane - f);
+h_true = (f*focus_plane./depth_true - f)./(focus_plane - f);
+pos_th = 0.01;
 for k = 1:nIter
   v = z-u;
   %pcg with (Ax = b), x, b are vectors
@@ -43,10 +46,10 @@ for k = 1:nIter
   z1(ind2) = v(ind2)+thresh;
   z(:,:,1:2) = z1;
 
-  v = x + u(:,:,3); 
-  z(:,:,3) = max(pos_th, v);
+  %v = x + u(:,:,3); 
+  %z(:,:,3) = max(pos_th, v);
   Kx(:,:,1:2) = Dxk;
-  Kx(:,:,3) = x;
+  %Kx(:,:,3) = x;
 
   u = u + Kx - z;
   l1 = Csc.*((x-hsc).^2);

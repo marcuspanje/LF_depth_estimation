@@ -64,7 +64,7 @@ end
 
 figure(4)
 xline = 379;
-dline = depth_smooth(xline, :) .* (Csc(xline, :) > 0.3);
+dline = depth_raw(xline, :) .* (Csc(xline, :) > 0.3);
 %dline(dline > 3) = 0;
 plot(1:sz_lf(2), dline, 'o');
 xlabel('pixel column', 'FontSize', 15);

@@ -9,7 +9,7 @@ for u = 1:nViews
 end
 
 f = LF.parameters.intrinsics.focal_length_mm/1000;
-pxPitch = LF.parameters.intrinsics.sensor_size_mm/(1000*nViews*w);
+pxPitch = LF.parameters.intrinsics.sensor_size_mm/(1000*nViews);
 viewPitch = LF.parameters.extrinsics.baseline_mm/1000;
 focus_plane = LF.parameters.extrinsics.focus_distance_m;
 depth_true = LF.depth_lowres;

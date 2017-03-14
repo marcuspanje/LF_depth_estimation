@@ -17,12 +17,12 @@ saveImages = 1;
 %depth_raw = f*D./(h.*(D-f) + f);
 %depth_smooth = f*D./(x.*(D-f) + f);
 %depth_raw = f ./ (h - min(h(:)) + 0.1);
+
 f_fp = f/focus_plane;
-depth_raw = f./(hsc*(1-f_fp) + f_fp);
-depth_raw = f./hsc;
+depth_raw = f./(h*(1-f_fp) + f_fp);
 depth_raw(isnan(depth_raw)) = max(depth_raw(:));
 
-depth_smooth = f./x;
+depth_smooth = f./(x*(1-f_fp) + f_fp);
 depth_smooth_hsv = ones([sz_lf(1:2) 3]);
 %depth_smooth_hsv(:,:,1) = 0.75*depth_smooth;
 depth_smooth_hsv(:,:,1) = 0.75*mean_scale(depth_smooth, 0.1, 1.8);
@@ -41,7 +41,7 @@ depth_rgb = hsv2rgb(depth_hsv);
 imshow(depth_rgb);
 title('OF depth');
 
-gnd = 0.75*depth_true./max(depth_true(:));
+gnd = depth_true./max(depth_true(:));
 
 subplot(2,2,3);
 imshow(2*squeeze(lf(:,:,nV_2,nV_2,:)));
@@ -69,8 +69,8 @@ if saveImages
 end
 
 figure(4)
-xline = 225;
-dline = depth_raw(xline, :) .* (Csc(xline, :) > 0.3);
+xline = 247;
+dline = depth_smooth(xline, :) .* (Csc(xline, :) > 0.3);
 dline(dline > 10) = 0;
 plot(1:sz_lf(2), dline, 'o', 1:sz_lf(2), LF.depth_lowres(xline, :), 'x');
 legend('results', 'gnd truth');
