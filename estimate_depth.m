@@ -4,18 +4,22 @@
 %3 - run from admm
 %4 - run from plotter
 
-run_params = 3;
-fname = 'books_4';
+run_params = 1;
+fname = 'flowers_plants_1';
 %path to json library
 addpath('jsonlab-1.5/jsonlab-1.5');
 %json filename of camera metatdata extracted from lytro .LFP file
 %see https://github.com/nrpatel/lfptools on how to obtain this file
 try
     data = loadjson(sprintf('lf_images/%s/%s.json', fname, fname)); 
-    validData = 1;
+    f = data.frames{1}.frame.metadata.devices.lens.focalLength;
+    apertureDiameter = f/data.frames{1}.frame.metadata.devices.lens.fNumber;
+    pxWidth = data.frames{1}.frame.metadata.devices.sensor.pixelPitch;
 catch
-    validData = -1;
     disp('no camera meta data found');
+    f = 0.05;
+    apertureDiameter = 0.006;
+    pxWidth = 1e-6;
 end
 
 if run_params < 2

@@ -15,12 +15,12 @@ nV_2 = round(nViews/2);
 %pitch of pixel and viewing dist
 %pxPitch = data.frames{1}.frame.metadata.devices.sensor.pixelPitch;
 %vPitch = data.frames{1}.frame.metadata.devices.mla.lensPitch;
-
 %shift in pixel, and viewpoint should be the same units,
 %so estimate the baseline of 1 viewpoint shift along an axis
 %as #pixels in an image along that axis
-dvx = sz_lf(1)*(linspace(1,nViews,nViews)-nV_2);
-dvy = sz_lf(2)*(linspace(1,nViews,nViews)-nV_2);
+viewPitch = apertureDiameter/nViews;
+dvx = viewPitch*(linspace(1,nViews,nViews)-nV_2);
+dvy = viewPitch*(linspace(1,nViews,nViews)-nV_2);
 
 %mark valid viewpoints. viewpoints near corners are invalid
 valid = logical(zeros(nViews, nViews)); 
@@ -31,18 +31,17 @@ for i = 1:nViews
 end
  
 
-disp('compute optical flow');
 %take center view as reference point
 %compute h value of each pixel by estimating by the h-value for its
 %surrounding patch 
 szP = 5; %should be odd
 FK = psf2otf(ones(szP), sz_lf(1:2)); %convolution kernel for patch averaging
-
+pxPitch = nViews*pxWidth;
 %pixel gradients
 Ix = zeros(sz_lf(1), sz_lf(2), 1, 1, 3);
 Iy = zeros(sz_lf(1), sz_lf(2), 1, 1, 3); 
-Ix(1:end-1,:,:,:,:) = lf(2:end,:,nV_2, nV_2,:) - lf(1:end-1,:,nV_2, nV_2,:);
-Iy(:,1:end-1,:,:,:) = lf(:,2:end,nV_2, nV_2,:) - lf(:,1:end-1,nV_2, nV_2,:);
+Ix(1:end-1,:,:,:,:) = (lf(2:end,:,nV_2, nV_2,:) - lf(1:end-1,:,nV_2, nV_2,:))/(pxPitch);
+Iy(:,1:end-1,:,:,:) = (lf(:,2:end,nV_2, nV_2,:) - lf(:,1:end-1,nV_2, nV_2,:))/(pxPitch);
 %C is confidence value, the sum of gradients at a pixel
 C = squeeze(Ix.^2 + Iy.^2);
 K_Ix2_Iy2 = ifft2(FK.*fft2(C));
