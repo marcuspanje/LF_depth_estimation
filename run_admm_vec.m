@@ -1,6 +1,6 @@
 %use confidence values as weights
 Csc = sum(C,3);
-Csc = mean_scale(Csc, 0, 2);
+Csc = mean_scale(Csc, 2, 2);
 %don't let it go completely to 0
 offset = 0.3;
 Csc = (1-offset)*Csc + offset;
@@ -30,11 +30,10 @@ loss = zeros(nIter, 1);
 loss2 = zeros(nIter, 1);
 Kx = zeros(size(z));
 max_d = 5;
-h_true = LF.disp_lowres;
 for k = 1:nIter
   v = z-u;
   %pcg with (Ax = b), x, b are vectors
-  b = b1 + rho*(opDtx(v(:,:,1:2)));
+  b = b1 + rho*(opDtx(v));
   x = reshape(pcg(Afunline, b(:), tol, maxIter), sz_h(1), sz_h(2)); 
 
   Dxk = opDx(x);

@@ -9,18 +9,16 @@ run_params = 1;
 %heidelberg is the dataset from http://hci-lightfield.iwr.uni-heidelberg.de/
 %lytro is the raw lytro image converted to png format
 
-img_format = 'heidelberg';
+img_format = 'lytro';
 
-fname = 'LF.mat';
-foldername = 'lf_images/cotton';
-%path to json library
-addpath('jsonlab-1.5/jsonlab-1.5');
+fname = 'people_14';
+foldername = 'lf_images/people_14';
 
 disp('loading light field image');
 if strcmp('lytro', img_format)
-  load_lf;
+  load_lf_lytro;
 elseif strcmp('heidelberg', img_format)
-  load_lf2;
+  load_lf_heidelberg;
 else
   error('format not recognized');
 end
@@ -32,5 +30,5 @@ disp('run admm with TV prior');
 run_admm_vec;
 
 disp('plot');
-plotter2;
+plotter;
 

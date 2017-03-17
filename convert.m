@@ -27,6 +27,6 @@
 %                                                                          %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-convertBlenderTo5D('lf_images/cotton')
+convertBlenderTo5D('lf_images/town')
 
 

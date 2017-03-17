@@ -12,8 +12,8 @@
 sz_lf = size(lf);
 nViews = sz_lf(3);
 nV_2 = round(nViews/2);
-dvx = viewPitch*(linspace(1,nViews,nViews)-nV_2);
-dvy = viewPitch*(linspace(1,nViews,nViews)-nV_2);
+dvx = viewPitch*linspace(1,nViews,nViews)-nV_2;
+dvy = viewPitch*linspace(1,nViews,nViews)-nV_2;
 
 if strcmp('lytro', img_format)
 %mark valid viewpoints. viewpoints near corners are invalid
@@ -37,9 +37,8 @@ FK = psf2otf(ones(szP), sz_lf(1:2)); %convolution kernel for patch averaging
 %pixel gradients
 Ix = zeros(sz_lf(1), sz_lf(2), 1, 1, 3);
 Iy = zeros(sz_lf(1), sz_lf(2), 1, 1, 3); 
-%pxPitch = 1;
-Ix(1:end-1,:,:,:,:) = (lf(2:end,:,nV_2, nV_2,:) - lf(1:end-1,:,nV_2, nV_2,:))/(pxPitch);
-Iy(:,1:end-1,:,:,:) = (lf(:,2:end,nV_2, nV_2,:) - lf(:,1:end-1,nV_2, nV_2,:))/(pxPitch);
+Ix(1:end-1,:,:,:,:) = (1/pxPitch)*(lf(2:end,:,nV_2, nV_2,:) - lf(1:end-1,:,nV_2, nV_2,:));
+Iy(:,1:end-1,:,:,:) = (1/pxPitch)*(lf(:,2:end,nV_2, nV_2,:) - lf(:,1:end-1,nV_2, nV_2,:));
 %C is confidence value, the sum of gradients at a pixel
 C = squeeze(Ix.^2 + Iy.^2);
 K_Ix2_Iy2 = real(ifft2(FK.*fft2(C)));
@@ -66,4 +65,6 @@ for vx = 1:nViews
 end
 
 h = real(ifft2(Fnum) ./ den);  
+h(h == Inf) = 0;
+h(h == -Inf) = 0;
 %hsc = mean_scale(h, 0.1, 10);
