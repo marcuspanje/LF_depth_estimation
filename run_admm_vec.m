@@ -12,12 +12,12 @@ x = zeros(sz_h(1), sz_h(2));
 x = h;
 z = zeros(sz_h(1), sz_h(2),3);
 u = zeros(sz_h(1), sz_h(2),3);
-rho = 10;
-lambda = 0.001; 
+rho = 1;
+lambda = 0; 
 thresh = lambda/rho;
 
 b1 = Csc.*hsc;
-%b1 = Csc .* h;
+b1 = Csc .* h;
 nIter = 30;
 tol = 1e-10;
 maxIter = 50;
@@ -52,9 +52,10 @@ for k = 1:nIter
   %Kx(:,:,3) = x;
 
   u = u + Kx - z;
-  l1 = Csc.*((x-hsc).^2);
+  l1 = Csc.*((x-h).^2);
   l2 = abs(Dxk);
-  l3 = sum(x(:) > pos_th);
+  l3 = 0;
+  %l3 = sum(x(:) > pos_th);
   loss(k) = 0.5*sum(l1(:)) + lambda*(sum(l2(:)) + l3);
   loss2(k) = sumsqr(x-h_true);
 end

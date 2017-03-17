@@ -5,7 +5,7 @@
 %4 - run from plotter
 
 run_params = 1;
-fname = 'cotton';
+fname = 'boxes';
 %path to json library
 addpath('jsonlab-1.5/jsonlab-1.5');
 
