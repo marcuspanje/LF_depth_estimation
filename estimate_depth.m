@@ -5,24 +5,31 @@
 %4 - run from plotter
 
 run_params = 1;
-fname = 'boxes';
+%'lytro' or 'heidelberg'
+%heidelberg is the dataset from http://hci-lightfield.iwr.uni-heidelberg.de/
+%lytro is the raw lytro image converted to png format
+
+img_format = 'heidelberg';
+
+fname = 'LF.mat';
+foldername = 'lf_images/cotton';
 %path to json library
 addpath('jsonlab-1.5/jsonlab-1.5');
 
-if run_params < 2
-  disp('loading light field image');
+disp('loading light field image');
+if strcmp('lytro', img_format)
+  load_lf;
+elseif strcmp('heidelberg', img_format)
   load_lf2;
+else
+  error('format not recognized');
 end
 
-if run_params < 3
-  disp('compute optical flow');
-  compute_of;
-end
+disp('compute optical flow');
+compute_of;
 
-if run_params < 4
-  disp('run admm with TV prior');
-  run_admm_vec;
-end
+disp('run admm with TV prior');
+run_admm_vec;
 
 disp('plot');
 plotter2;

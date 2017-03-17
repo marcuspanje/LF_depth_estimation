@@ -1,6 +1,6 @@
 %%% compute optical flow %%%
 %computes pixel gradients(Dx) and viewpoint gradients(Dv) to estimate  
-%h: (shift in viewpoint)/(shift in pixel) 
+%h: (shift in pixel)/(shift in viewpoint) 
 %Dx_x I(i,j) = I(i+1,j) - I(i,j)  
 %Dx_y I(i,j) = I(i,j+1) - I(i,j)  
 %Dv_x I(i,j) = I(,,vx+1,vy) - I(,,vx,vy)
@@ -12,25 +12,21 @@
 sz_lf = size(lf);
 nViews = sz_lf(3);
 nV_2 = round(nViews/2);
-%pitch of pixel and viewing dist
-%pxPitch = data.frames{1}.frame.metadata.devices.sensor.pixelPitch;
-%vPitch = data.frames{1}.frame.metadata.devices.mla.lensPitch;
-%shift in pixel, and viewpoint should be the same units,
-%so estimate the baseline of 1 viewpoint shift along an axis
-%as #pixels in an image along that axis
-%viewPitch = sz_lf(1);
 dvx = viewPitch*(linspace(1,nViews,nViews)-nV_2);
 dvy = viewPitch*(linspace(1,nViews,nViews)-nV_2);
 
+if strcmp('lytro', img_format)
 %mark valid viewpoints. viewpoints near corners are invalid
-valid = logical(zeros(nViews, nViews)); 
-validImagesPerRow = [0 6 8 10 10 10 10 10 10 10 10 8 6 0]; 
-for i = 1:nViews
-  n = validImagesPerRow(i)/2;
-  valid(i, nV_2-n+1:nV_2+n) = logical(1);
+  valid = logical(zeros(nViews, nViews)); 
+  validImagesPerRow = [0 6 8 10 10 10 10 10 10 10 10 8 6 0]; 
+  for i = 1:nViews
+    n = validImagesPerRow(i)/2;
+    valid(i, nV_2-n+1:nV_2+n) = logical(1);
+  end
+elseif strcmp('heidelberg', img_format)
+%all viewpoints valid for synthetic dataset
+  valid = logical(ones(nViews, nViews));
 end
-
-valid = logical(ones(nViews, nViews));
  
 
 %take center view as reference point
@@ -70,4 +66,4 @@ for vx = 1:nViews
 end
 
 h = real(ifft2(Fnum) ./ den);  
-hsc = mean_scale(h, 0.1, 10);
+%hsc = mean_scale(h, 0.1, 10);
