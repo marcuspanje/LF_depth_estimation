@@ -1,8 +1,8 @@
 %use confidence values as weights
 Csc = sum(C,3);
-Csc = mean_scale(Csc, 2, 2);
+Csc = mean_scale(Csc, 0.5, 0.5);
 %don't let it go completely to 0
-offset = 0.3;
+offset = 0.2;
 Csc = (1-offset)*Csc + offset;
 Csc = Csc.^2;
 %Csc = ones(sz_lf(1:2));
@@ -13,7 +13,7 @@ x = zeros(sz_h(1), sz_h(2));
 z = zeros(sz_h(1), sz_h(2),2);
 u = zeros(sz_h(1), sz_h(2),2);
 rho = 10;
-lambda = 0.001; 
+lambda = 0.05; 
 thresh = lambda/rho;
 Afunline = @(x) Afun(x, sz_h, Csc, rho);
 %soft_thresholding function

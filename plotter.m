@@ -21,7 +21,8 @@ depth_rgb = hsv2rgb(depth_hsv);
 imshow(depth_rgb);
 title('OF depth, C brightened');
 
-gnd = 0.75*depth_true./max(depth_true(:));
+%gnd = 0.75*depth_true./max(depth_true(:));
+gnd = 0.75*mean_scale(depth_true, 3,3);
 gnd_hsv = ones([sz_lf(1:2) 3]); 
 gnd_hsv(:,:,1) = gnd;
 gnd_rgb = hsv2rgb(gnd_hsv);
@@ -49,18 +50,19 @@ ylabel('gnd truth loss', 'FontSize', 15);
 
 figure(3);
 subplot(2,1,1);
-histogram(depth_raw(:));
+histogram(h(:));
 title('raw depth hist');
 subplot(2,1,2);
-histogram(depth_smooth(:));
+histogram(h_true(:));
 title('smooth depth hist');
 
 
 figure(4)
-xline = 280;
-dline = depth_smooth(xline, :) .* (Csc(xline, :) > 0.1);
-dline(dline > 10) = 0;
-plot(1:sz_lf(2), dline, 'o', 1:sz_lf(2), depth_true(xline, :), 'x');
-legend('results', 'gnd truth');
+xline = 72;
+dline = depth_smooth(xline, :); %.* (Csc(xline, :) > 0.01);
+plot(1:sz_lf(2), dline, 'o',  ...
+  1:sz_lf(2), depth_raw(xline, :), '.', ...
+  1:sz_lf(2), depth_true(xline, :), 'x');
+legend('regularized', 'unregularized', 'gnd truth');
 xlabel('pixel column', 'FontSize', 15);
-ylabel('depth (m)');
+ylabel('depth (m)', 'FontSize', 15);
