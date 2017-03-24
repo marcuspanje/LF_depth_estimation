@@ -1,4 +1,4 @@
-#Light Field Depth Estimation Using Optical Flow
+# Light Field Depth Estimation Using Optical Flow
 
 This code estimates depth from a light field image.
 Supported light field formats are .png outputs from Lytro's .lfr raw image, and a 5D image in MATLAB's .mat format from the [dataset](http://hci-lightfield.iwr.uni-heidelberg.de/)
